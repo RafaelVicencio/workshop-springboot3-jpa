@@ -8,12 +8,19 @@ import org.springframework.stereotype.Service;
 
 import com.educandoweb.course.entities.User;
 import com.educandoweb.course.repositories.UserRepository;
+import com.educandoweb.course.resources.CategoryResource;
 
 @Service
 public class UserService {
 
+    private final CategoryResource categoryResource;
+
 	@Autowired
 	private UserRepository repository;
+
+    UserService(CategoryResource categoryResource) {
+        this.categoryResource = categoryResource;
+    }
 
 	public List<User> findAll() {
 		return repository.findAll();
@@ -30,5 +37,17 @@ public class UserService {
 	
 	public void delete(Long id) {
 		repository.deleteById(id);
+	}
+	
+	public User update(Long id, User obj) {
+		User entity = repository.getReferenceById(id);
+		updateData(entity, obj);
+		return repository.save(entity);
+	}
+	
+	private void updateData(User entity, User obj) {
+		entity.setName(obj.getName());
+		entity.setEmail(obj.getEmail());
+		entity.setPhone(obj.getPhone());
 	}
 }
