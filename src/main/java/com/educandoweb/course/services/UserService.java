@@ -8,19 +8,19 @@ import org.springframework.stereotype.Service;
 
 import com.educandoweb.course.entities.User;
 import com.educandoweb.course.repositories.UserRepository;
-import com.educandoweb.course.resources.CategoryResource;
+import com.educandoweb.course.services.exceptions.ResourceNotFoundException;
 
 @Service
 public class UserService {
 
-    private final CategoryResource categoryResource;
+    //private final CategoryResource categoryResource;
 
 	@Autowired
 	private UserRepository repository;
 
-    UserService(CategoryResource categoryResource) {
-        this.categoryResource = categoryResource;
-    }
+//    UserService(CategoryResource categoryResource) {
+//        this.categoryResource = categoryResource;
+//    }
 
 	public List<User> findAll() {
 		return repository.findAll();
@@ -28,7 +28,7 @@ public class UserService {
 
 	public User findbyId(Long id) {
 		Optional<User> obj = repository.findById(id);
-		return obj.get();
+		return obj.orElseThrow(() -> new ResourceNotFoundException(id));
 	}
 	
 	public User insert(User obj) {
